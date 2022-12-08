@@ -1,0 +1,7 @@
+.content {
+  padding: 12px;
+  font-size: 13px;
+}
+.content .card {
+  border-radius: 5px;
+}

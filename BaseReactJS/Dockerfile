@@ -1,0 +1,24 @@
+FROM node:14-alpine as build-stage
+# set working directory
+WORKDIR /app
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+# install app dependencies
+COPY package*.json ./
+# RUN npm install
+RUN npm install
+
+# add app
+COPY . ./
+
+#build for production
+RUN npm run-script build
+
+# #### Stage 1, push the compressed  built app into nginx ####
+FROM nginx:stable-alpine
+# Copy what we've installed/built from production
+COPY --from=build-stage /app/build/ /usr/share/nginx/html/cms
+# Change nginx config
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+# Reload nginx
+CMD ["nginx", "-g", "daemon off;"]

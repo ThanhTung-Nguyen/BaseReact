@@ -1,0 +1,11 @@
+.general-wrapper {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+.general-wrapper .ant-upload-list-item {
+  height: auto;
+}
+.general-wrapper .ant-upload-list-item-name {
+  white-space: normal;
+  color: gray;
+}

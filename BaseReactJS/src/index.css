@@ -1,0 +1,103 @@
+body {
+  height: 100%;
+  overflow-y: auto scroll;
+  background-color: #f8f8f8;
+}
+/* * {
+  font-size: 12px !important;
+} */
+.ant-notification-notice-message {
+  color: #fff;
+  font-weight: 600;
+}
+
+.ant-page-header-heading-title {
+  font-size: 16px !important;
+}
+.ant-spin .ant-spin-dot {
+  font-size: 20px !important;
+}
+.ant-table-cell {
+  font-size: 12px !important;
+}
+.ant-form-item-label > label {
+  color: #666 !important;
+  white-space: break-spaces !important;
+}
+
+.ant-form,
+.ant-form label,
+.ant-input,
+.ant-select-selector,
+.ant-picker,
+.ant-picker-input input,
+.ant-form-item {
+  font-size: 12px !important;
+  margin-bottom: 5px !important;
+}
+.ant-input-search-button {
+  height: 28px !important;
+  margin-bottom: 5px;
+}
+
+.ant-table-thead > tr > th {
+  background: #2073d3 !important;
+  color: #ffff !important;
+}
+
+.react-checkbox-tree label {
+  /* font-size: 14px !important; */
+  width: 100px;
+}
+.react-checkbox-tree .rct-checkbox {
+  font-size: 16px;
+}
+.react-checkbox-tree .rct-collapse {
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+
+.react-checkbox-tree label .rct-title {
+  font-size: 14px !important;
+  position: absolute;
+}
+
+.react-checkbox-tree .rct-text {
+  display: contents;
+}
+
+.ant-modal,
+.ant-modal-content,
+.ant-modal-header {
+  border-radius: 10px !important;
+}
+
+.ant-table-content {
+  overflow: auto hidden;
+}
+.ant-modal-footer {
+  justify-content: center;
+  display: flex;
+}
+.ant-statistic-title {
+  font-weight: 500 !important;
+  font-size: 18px !important;
+}
+
+.ant-list-item:hover {
+  background-color: #1890ff;
+}
+
+.ant-list-item:hover .ant-list-item-meta-title {
+  color: #fff !important;
+}
+.ant-list-item:hover .ant-list-item-meta-description {
+  color: #fff !important;
+}
+
+.item-active,
+.item-active .ant-list-item-meta-title,
+.item-active .ant-list-item-meta-description {
+  background-color: #1890ff;
+  color: #fff !important;
+}

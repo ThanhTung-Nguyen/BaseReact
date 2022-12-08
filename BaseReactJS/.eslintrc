@@ -1,0 +1,32 @@
+{
+  "extends": ["react-app", "prettier"],
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "eqeqeq": 0,
+    "jsx-a11y/anchor-is-valid": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "array-callback-return": "off",
+    "jsx-a11y/alt-text": "off",
+    "no-useless-concat": "off",
+    "no-empty-pattern": "off",
+    "no-useless-rename": "off",
+    "comma-dangle": ["error", "never", { "arrays": "always" }],
+    "no-useless-escape": "off",
+    "prettier/prettier": [
+      "warn",
+      {
+        "arrowParens": "avoid",
+        "semi": false,
+        "trailingComma": "none",
+        "endOfLine": "auto",
+        "tabWidth": 2,
+        "printWidth": 80,
+        "useTabs": false
+      }
+      // { "usePrettierrc": true }
+    ]
+  }
+}

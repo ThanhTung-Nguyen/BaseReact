@@ -1,0 +1,112 @@
+default:
+  image: registry.medon.vn/hieutt/kube-tool:v1.20.8-helmv3.8.2
+
+.common: &common |
+  init() {
+    echo "init kube cluster"
+    # export KUBECONFIG=$KUBE_CONFIG_STAG:$KUBE_CONFIG_PRD
+    echo "$KUBE_HOSTS" > /etc/hosts
+    # kubectl config use-context $CI_ENVIRONMENT_NAME
+    if [[ $CI_ENVIRONMENT_NAME == "production" ]]; then
+      export IMAGE_TAG=prod-v$VERSION-$CI_COMMIT_SHORT_SHA
+      export KUBECONFIG=$KUBE_CONFIG_PRD
+      kubectl config use-context local
+    else
+      export IMAGE_TAG=stag-v$VERSION-$CI_COMMIT_SHORT_SHA
+      export KUBECONFIG=$KUBE_CONFIG_STAG
+      kubectl config use-context local
+    fi
+  }
+
+  deploy_to_cluster() {
+    echo "deploy $CI_PROJECT_NAME using chart $CHART_NAME to $CI_ENVIRONMENT_NAME environment"
+    cd ./deploy/$CHART_NAME
+    helm upgrade --install $CI_PROJECT_NAME . \
+      -f values-$CI_ENVIRONMENT_NAME.yaml \
+      --set image.tag=$IMAGE_TAG \
+      --namespace $KUBE_NAMESPACE \
+      --wait --atomic \
+      --timeout 15m0s
+  }
+
+.common-build: &common-build |
+  init() {
+    echo "init build environment"
+    export DOCKER_FILE=Dockerfile-$CI_ENVIRONMENT_NAME
+    if [[ $CI_ENVIRONMENT_NAME == "production" ]]; then
+      export IMAGE_TAG=prod-v$VERSION-$CI_COMMIT_SHORT_SHA
+    else
+      export IMAGE_TAG=stag-v$VERSION-$CI_COMMIT_SHORT_SHA
+    fi
+    export IMAGE_NAME=$CI_REGISTRY_IMAGE:$IMAGE_TAG
+  }
+
+  build_image() {
+    echo "build image $CI_PROJECT_NAME to $CI_ENVIRONMENT_NAME environment"
+    echo "$CI_REGISTRY_HOST" > /etc/hosts
+    docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    apk update && apk add git
+    git submodule init
+    git submodule update --recursive --remote
+    docker build -f $DOCKER_FILE -t "$IMAGE_NAME" .
+    docker push "$IMAGE_NAME"
+  }
+
+
+
+variables:
+  # IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  CHART_NAME: $CI_PROJECT_NAME
+
+stages:
+  - build
+  - deploy
+
+.build: &build
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - *common-build
+  script:
+    - init
+    - build_image
+
+build_staging:
+  <<: *build
+  environment:
+    name: staging
+  only:
+    - develop
+
+build_production:
+  <<: *build
+  environment:
+    name: production
+  only:
+    - main
+
+.deploy: &deploy
+  stage: deploy
+  before_script:
+    - *common
+  script:
+    - init
+    - deploy_to_cluster
+
+deploy_staging:
+  <<: *deploy
+  environment:
+    name: staging
+  only:
+    - develop
+
+deploy_production:
+  #image: registry.medon.vn/hieutt/kube-tool:v1.20.8-helmv3.8.2
+  <<: *deploy
+  environment:
+    name: production
+  only:
+    - main
+  when: manual

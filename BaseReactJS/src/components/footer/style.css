@@ -1,0 +1,15 @@
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px !important;
+  position: fixed;
+  width: 100%;
+  /* background: #2073d3 !important; */
+}
+
+.footer .copyright {
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 16px;
+  text-align: center;
+}

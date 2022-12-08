@@ -1,0 +1,21 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "git.ignoreLimitWarning": true,
+  "cSpell.language": "en,lorem,en-GB",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.enabled": true,
+  "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  }
+  // "[jsonc]": {
+  //   "editor.defaultFormatter": "vscode.json-language-features"
+  // },
+  // "[typescriptreact]": {
+  //   "editor.defaultFormatter": "vscode.typescript-language-features"
+  // },
+  // "cSpell.enabled": true
+}

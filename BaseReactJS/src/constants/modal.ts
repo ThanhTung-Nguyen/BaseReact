@@ -1,0 +1,5 @@
+export const ModalConstants = {
+  SHOW_MODAL: "SHOW_MODAL",
+  HIDE_MODAL: "HIDE_MODAL",
+  CHANGE_TITLE_MODAL: "CHANGE_TITLE_MODAL"
+}
