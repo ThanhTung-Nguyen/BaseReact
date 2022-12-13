@@ -16,6 +16,7 @@ import {
 } from "src/graphql/categories/category.graphql"
 import { createDeflate } from "zlib"
 import { useQueryProjects } from "src/graphql/project/project.graphql"
+import axios from "axios"
 
 const ArticleCategoryPage = () => {
   const [selectedRows, setSelectedRows] = useState<ICategory[]>([])
@@ -35,7 +36,30 @@ const ArticleCategoryPage = () => {
 
   const [saveNewsCategory] = useSaveNewsCategory({}, variables)
   const [deleteNewsCategory] = useRemoveNewsCategory({}, variables)
+  const [people, setPeople] = useState<any[]>([])
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
+  useEffect(() => {
+    setLoading(true)
+    axios
+      .get("https://6391459665ff41831129bfe1.mockapi.io/api/v1/user/")
+      .then(res => {
+        setPeople(res.data)
+        // console.log(res.data)
+        setLoading(false)
+      })
+      .catch(err => {
+        setError("Có gì đó không ổn...")
+        console.log(err)
+      })
+  }, [])
+  const deletePeople = person => {
+    console.log(person)
+
+    axios.delete(`https://6391459665ff41831129bfe1.mockapi.io/api/v1/user/`)
+    setPeople(people.filter(p => p.id !== person.id))
+  }
   const onDelete = (selectedRow: ICategory) => {
     setSelectedRow(selectedRow)
     setShowConfirm(true)
@@ -129,44 +153,47 @@ const ArticleCategoryPage = () => {
   }, 1000)
 
   return (
-    <WrapperArticleCategory>
-      <Helmet>
-        <title>Chuyên mục tin tức</title>
-        <meta name="description" content="Chuyên mục tin tức" />
-      </Helmet>
-      <Filter
-        handleMultipleDelete={onMultipleDelete}
-        handleShowCreateModal={onShowCreateModal}
-        handleSearch={onSearch}
-      />
-      <TableArticleCategory
-        data={[]}
-        loading={false}
-        page={1}
-        pageSize={pageSize}
-        records={10}
-        handleShowCreateModal={onShowCreateModal}
-        handleShowEditModal={onShowEditModal}
-        handleShowDetailModal={onShowDetailModal}
-        handleCreate={onCreate}
-        handleDelete={onDelete}
-        setSelectedRows={setSelectedRows}
-        selectedRows={selectedRows}
-        handleChangePage={onChangePage}
-        handleChangeStatus={onChangeStatus}
-        handleSubmit={onSubmit}
-        dataProject={[]}
-      />
-      <FormArticleCategory
-        list={[]}
-        dataProject={[]}
-        data={selectedRow}
-        formAction={formAction}
-        showModal={showModal}
-        handleCloseModal={onCloseModal}
-        handleSubmit={onSubmit}
-      />
-    </WrapperArticleCategory>
+    <>
+      {error && <h3>{error}</h3>}
+      <WrapperArticleCategory>
+        <Helmet>
+          <title>Chuyên mục tin tức</title>
+          <meta name="description" content="Chuyên mục tin tức" />
+        </Helmet>
+        <Filter
+          handleMultipleDelete={onMultipleDelete}
+          handleShowCreateModal={onShowCreateModal}
+          handleSearch={onSearch}
+        />
+        <TableArticleCategory
+          data={people}
+          loading={false}
+          page={1}
+          pageSize={pageSize}
+          records={10}
+          handleShowCreateModal={onShowCreateModal}
+          handleShowEditModal={onShowEditModal}
+          handleShowDetailModal={onShowDetailModal}
+          handleCreate={onCreate}
+          handleDelete={() => deletePeople(people)}
+          setSelectedRows={setSelectedRows}
+          selectedRows={selectedRows}
+          handleChangePage={onChangePage}
+          handleChangeStatus={onChangeStatus}
+          handleSubmit={onSubmit}
+          dataProject={[]}
+        />
+        <FormArticleCategory
+          list={[]}
+          dataProject={[]}
+          data={selectedRow}
+          formAction={formAction}
+          showModal={showModal}
+          handleCloseModal={onCloseModal}
+          handleSubmit={onSubmit}
+        />
+      </WrapperArticleCategory>
+    </>
   )
 }
 

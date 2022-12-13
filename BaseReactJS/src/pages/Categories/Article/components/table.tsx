@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react"
+import React, { memo, useState, useEffect } from "react"
 import { Button, Col, Form, Row, Space, Switch, Table, Tooltip } from "antd"
 import { ITableArticleCategoryProps } from "../types"
 import { ColumnsType, TablePaginationConfig } from "antd/lib/table"
@@ -14,6 +14,7 @@ import { WrapperTableArticle } from "../styles"
 import { WrapperTableButton } from "../../../stylepage"
 import { TitleTooltip } from "src/constants/enum"
 import { openConfirmModal } from "src/helpers/notification"
+import axios from "axios"
 
 const TableArticleCategory = memo(
   ({
@@ -40,41 +41,87 @@ const TableArticleCategory = memo(
     const columns: any = [
       {
         title: "Mã dự án",
-        dataIndex: "projectCode",
+        dataIndex: "id",
+        width: "5%",
         render: (value, record) => {
           return <Tooltip title={TitleTooltip}>{value}</Tooltip>
         }
       },
       {
         title: "Tên dự án",
-        dataIndex: "",
-        render: (value, record) => {
-          const findProject = dataProject?.find(
-            item => item?.code == record?.projectCode
-          )
-          return (
-            <Tooltip title={TitleTooltip}>{findProject?.name ?? ""}</Tooltip>
-          )
-        }
-      },
-      {
-        title: "Tên chuyên mục",
         dataIndex: "name",
+        // render: (value, record) => {
+        //   const findProject = dataProject?.find(
+        //     item => item?.code == record?.projectCode
+        //   )
+        //   return (
+        //     <Tooltip title={TitleTooltip}>{findProject?.name ?? ""}</Tooltip>
+        //   )
+        // }
         render: (value, record) => {
           return <Tooltip title={TitleTooltip}>{value}</Tooltip>
         }
       },
-
+      {
+        title: "Tên chuyên mục",
+        dataIndex: "email",
+        render: (value, record) => {
+          return <Tooltip title={TitleTooltip}>{value}</Tooltip>
+        }
+      },
+      {
+        title: "Số đt",
+        dataIndex: "phone",
+        render: (value, record) => {
+          return <Tooltip title={TitleTooltip}>{value}</Tooltip>
+        }
+      },
+      {
+        title: "Ngày sinh",
+        dataIndex: "birthdate",
+        render: (value, record) => {
+          return <Tooltip title={TitleTooltip}>{value}</Tooltip>
+        }
+      },
+      {
+        title: "Giới tính",
+        dataIndex: "sex",
+        render: (value, record) => {
+          return <Tooltip title={TitleTooltip}>{value}</Tooltip>
+        }
+      },
       {
         title: "Ngày tạo",
-        dataIndex: "createDate",
+        dataIndex: "create_date",
         render: value => (
           <Tooltip title={TitleTooltip}>
             {moment(value, "YYYY-MM-DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss")}
           </Tooltip>
         )
       },
-
+      {
+        title: "Tài khoản tạo",
+        dataIndex: "create_user",
+        render: (value, record) => {
+          return <Tooltip title={TitleTooltip}>{value}</Tooltip>
+        }
+      },
+      {
+        title: "Ngày cập nhật",
+        dataIndex: "update_date",
+        render: value => (
+          <Tooltip title={TitleTooltip}>
+            {moment(value, "YYYY-MM-DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss")}
+          </Tooltip>
+        )
+      },
+      {
+        title: "Tài khoản update",
+        dataIndex: "update_user",
+        render: (value, record) => {
+          return <Tooltip title={TitleTooltip}>{value}</Tooltip>
+        }
+      },
       {
         title: "Trạng thái",
         dataIndex: "status",
@@ -82,7 +129,7 @@ const TableArticleCategory = memo(
           const onCheck = () => handleChangeStatus(record)
           return (
             <Space>
-              <Switch checked={value === 1} disabled onChange={onCheck} />
+              <Switch checked={value === true} disabled onChange={onCheck} />
               {value ? "Đã duyệt" : "Chưa duyệt"}
             </Space>
           )
