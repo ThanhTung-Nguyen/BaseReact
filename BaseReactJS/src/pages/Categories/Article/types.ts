@@ -11,7 +11,7 @@ export interface ITableArticleCategoryProps {
   handleChangePage: (page: number, pageSize?: number) => void
   setSelectedRows: any
   handleShowDetailModal: (selectedRow: ICategory) => void
-  handleShowEditModal: (selectedRow: ICategory) => void
+  handleEdit: (selectedRow: ICategory) => void
   handleCreate: (selectedRow: ICategory) => void
   handleDelete: (selectedRow: ICategory) => void
   handleChangeStatus: (selectedRow: ICategory) => void
@@ -34,4 +34,8 @@ export interface IFormArticleCategoryProps {
   showModal: boolean
   handleCloseModal: () => void
   handleSubmit: (value: ICategory) => void
+
+  dataForm?: any[]
+  handleCreate: (value: ICategory) => void
+  handleEdit: (selectedRow: ICategory) => void
 }

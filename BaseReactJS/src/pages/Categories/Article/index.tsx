@@ -36,17 +36,21 @@ const ArticleCategoryPage = () => {
 
   const [saveNewsCategory] = useSaveNewsCategory({}, variables)
   const [deleteNewsCategory] = useRemoveNewsCategory({}, variables)
-  const [people, setPeople] = useState<any[]>([])
+  const [people, setPeople] = useState<any>([])
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [dataform, setDataForm] = useState([
+    { key: 1, value: "Nguyễn Thanh Tùng" },
+    { key: 2, value: "Nguyễn Văn Quang" }
+  ])
 
+  const url = "https://6391459665ff41831129bfe1.mockapi.io/api/v1/user"
   useEffect(() => {
     setLoading(true)
     axios
-      .get("https://6391459665ff41831129bfe1.mockapi.io/api/v1/user/")
+      .get(url)
       .then(res => {
         setPeople(res.data)
-        // console.log(res.data)
         setLoading(false)
       })
       .catch(err => {
@@ -54,16 +58,25 @@ const ArticleCategoryPage = () => {
         console.log(err)
       })
   }, [])
-  const deletePeople = person => {
-    console.log(person)
 
-    axios.delete(`https://6391459665ff41831129bfe1.mockapi.io/api/v1/user/`)
-    setPeople(people.filter(p => p.id !== person.id))
-  }
   const onDelete = (selectedRow: ICategory) => {
+    axios
+      .delete(url + "/" + selectedRow.id)
+      .then(data => {
+        axios.get(url).then(res => {
+          setPeople(res.data)
+          console.log(res.data)
+        })
+        console.log(data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    setPeople(people.filter(p => p.id !== selectedRow))
+    console.log(selectedRow)
     setSelectedRow(selectedRow)
     setShowConfirm(true)
-    deleteNewsCategory({ variables: { id: selectedRow?.id } })
+    // deleteNewsCategory({ variables: { id: selectedRow?.id } })
   }
 
   const onCloseConfirm = () => {
@@ -90,12 +103,31 @@ const ArticleCategoryPage = () => {
   }
 
   const onShowEditModal = (selectedRow: ICategory) => {
+    console.log(selectedRow)
     setSelectedRow(selectedRow)
     setFormAction(FormAction.EDIT)
     setShowModal(true)
+    axios
+      .put(`${url}/${selectedRow.id}`, {
+        name: selectedRow.name,
+        email: selectedRow.email,
+        phone: selectedRow.phone,
+        status: selectedRow.status
+      })
+      .then(res => {
+        axios.get(url).then(res => {
+          setPeople(res.data)
+          console.log(res.data)
+        })
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   const onShowCreateModal = () => {
+    //Không post ở đây
     setSelectedRow(null)
     setFormAction(FormAction.CREATE)
     setShowModal(true)
@@ -107,21 +139,42 @@ const ArticleCategoryPage = () => {
     setSelectedRow(null)
   }
 
-  const onCreate = (selectedRow: ICategory) => {
-    setSelectedRow(selectedRow)
+  const onCreate = (value: ICategory) => {
+    console.log(value)
+    setSelectedRow(null)
     setFormAction(FormAction.CREATE)
     setShowModal(true)
+    axios
+      .post(url, {
+        name: value.name,
+        email: value.email,
+        phone: value.phone,
+        status: value.status
+      })
+      .then(res => {
+        console.log(value)
+        axios.get(url).then(res => {
+          setPeople(res.data)
+        })
+        console.log(res)
+        onCloseModal()
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   const onSubmit = (value: ICategory) => {
-    saveNewsCategory({
-      variables: {
-        input: {
-          ...value
-        }
-      }
-    })
-    onCloseModal()
+    //Không post ở đây
+    console.log(value)
+
+    // saveNewsCategory({
+    //   variables: {
+    //     input: {
+    //       ...value
+    //     }
+    //   }
+    // })
   }
 
   const onMultipleDelete = () => {}
@@ -172,24 +225,27 @@ const ArticleCategoryPage = () => {
           pageSize={pageSize}
           records={10}
           handleShowCreateModal={onShowCreateModal}
-          handleShowEditModal={onShowEditModal}
-          handleShowDetailModal={onShowDetailModal}
           handleCreate={onCreate}
-          handleDelete={() => deletePeople(people)}
+          handleEdit={onShowEditModal}
+          handleDelete={onDelete}
+          handleShowDetailModal={onShowDetailModal}
+          handleSubmit={onSubmit}
           setSelectedRows={setSelectedRows}
           selectedRows={selectedRows}
           handleChangePage={onChangePage}
           handleChangeStatus={onChangeStatus}
-          handleSubmit={onSubmit}
           dataProject={[]}
         />
         <FormArticleCategory
+          dataForm={dataform}
           list={[]}
-          dataProject={[]}
+          dataProject={people}
           data={selectedRow}
           formAction={formAction}
           showModal={showModal}
           handleCloseModal={onCloseModal}
+          handleCreate={onCreate}
+          handleEdit={onShowEditModal}
           handleSubmit={onSubmit}
         />
       </WrapperArticleCategory>

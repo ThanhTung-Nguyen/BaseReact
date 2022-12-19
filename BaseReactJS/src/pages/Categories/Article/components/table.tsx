@@ -26,13 +26,13 @@ const TableArticleCategory = memo(
     selectedRows,
     dataProject,
     handleChangePage,
+    handleShowCreateModal,
     handleCreate,
+    handleEdit,
     handleDelete,
     handleChangeStatus,
-    handleShowEditModal,
     handleShowDetailModal,
-    handleSubmit,
-    handleShowCreateModal
+    handleSubmit
   }: ITableArticleCategoryProps) => {
     const [filteredInfo, setFilterInfo] = useState<
       Record<string, FilterValue | null>
@@ -129,7 +129,7 @@ const TableArticleCategory = memo(
           const onCheck = () => handleChangeStatus(record)
           return (
             <Space>
-              <Switch checked={value === true} disabled onChange={onCheck} />
+              <Switch checked={value === 1} disabled onChange={onCheck} />
               {value ? "Đã duyệt" : "Chưa duyệt"}
             </Space>
           )
@@ -141,7 +141,7 @@ const TableArticleCategory = memo(
         dataIndex: "",
         width: 150,
         render: (value, record) => {
-          const onEdit = () => handleShowEditModal(record)
+          const onEdit = () => handleEdit(record)
           const onDelete = () => handleDelete(record)
           const onCreate = () => handleCreate(record)
 
@@ -222,7 +222,9 @@ const TableArticleCategory = memo(
                 htmlType="button"
                 type="default"
                 className="btnCreate"
-                onClick={() => handleShowCreateModal()}
+                onClick={() => {
+                  handleShowCreateModal()
+                }}
               >
                 <PlusCircleTwoTone twoToneColor="#26c705" /> Thêm mới
               </Button>
@@ -241,7 +243,7 @@ const TableArticleCategory = memo(
                 }
                 if (selected) {
                   setSelectedRows([record?.id])
-                  handleShowEditModal(record)
+                  handleEdit(record)
                 }
               }
             }}
@@ -250,7 +252,7 @@ const TableArticleCategory = memo(
                 setSelectedRows([record?.id])
               },
               onDoubleClick: (event: any) => {
-                handleShowEditModal(record)
+                handleEdit(record)
               }
             })}
             loading={loading}

@@ -24,6 +24,7 @@ import { FormAction, StatusEnum } from "src/constants/enum"
 import { Option } from "antd/lib/mentions"
 import Uploader from "src/components/Uploader"
 import { getTreeData } from "../utils"
+import axios from "axios"
 
 const FormArticleCategory = ({
   list,
@@ -32,33 +33,52 @@ const FormArticleCategory = ({
   formAction,
   showModal,
   dataProject,
+  dataForm,
   handleCloseModal,
-  handleSubmit
-}: IFormArticleCategoryProps) => {
+  handleCreate,
+  handleEdit
+// handleSubmit
+  
+}:IFormArticleCategoryProps) => {
   const formik = useFormik<ICategory>({
     validateOnMount: false,
     validateOnChange: true,
     enableReinitialize: true,
     initialValues: {
       name: "",
-      projectCode: "",
+      email: "",
+      phone: "",
       status: 1
     },
     validationSchema: yup.object().shape({
-      name: yup.string().required("Nhập vào tên chuyên mục"),
-      projectCode: yup.string().required("Chọn dự án")
+      email: yup.string().required("Nhập vào tên chuyên mục"),
+      name: yup.string().required("Chọn dự án")
     }),
     onSubmit: value => {
+      console.log(value)
       if (isFormDetail) {
         return
       }
-
-      handleSubmit({
-        description: value.description,
-        id: value.id,
+      // handleSubmit({
+      //   // description: value.description,
+      //   // id: value.id,
+      //   name: value.name,
+      //   email: value.email,
+      //   phone: value.phone,
+      //   status: value.status
+      // })
+      if (value.id) {
+        handleCreate({
+          name: value.name,
+          email: value.email,
+          phone: value.phone,
+          status: value.status
+        })
+      }
+      handleEdit({
         name: value.name,
-        parentId: value.parentId,
-        projectCode: value.projectCode,
+        email: value.email,
+        phone: value.phone,
         status: value.status
       })
     }
@@ -156,47 +176,60 @@ const FormArticleCategory = ({
                 <Select
                   placeholder="Chọn dự án"
                   allowClear
-                  value={formik.values.projectCode}
+                  value={formik.values.name}
                   onBlur={formik.handleBlur}
                   onChange={value => {
-                    formik.setFieldValue("projectCode", value)
+                    formik.setFieldValue("name", value)
                     formik.handleChange(value)
+                    // console.log(value)
                   }}
                 >
-                  {dataProject?.map(item => {
+                  {dataForm?.map((element, item) => {
+                    // console.log(element)
+
                     return (
-                      <Select.Option key={item.code}>{item.name}</Select.Option>
+                      <Select.Option
+                        name="name"
+                        key={item}
+                        value={element.value}
+                        // uniqueid={item.name}
+                      >
+                        {/* {element.value} */}
+                      </Select.Option>
                     )
                   })}
                 </Select>
-                <FieldError error={!!formik.errors.projectCode}>
-                  {formik.errors.projectCode}
+                <FieldError error={!!formik.errors.name}>
+                  {formik.errors.name}
                 </FieldError>
               </>
             </Form.Item>
             <Form.Item label="Tên chuyên mục" required>
               <>
                 <Input
-                  title={formik.values.name}
-                  name="name"
+                  title="email"
+                  name="email"
                   type="text"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.name}
+                  value={formik.values.email}
                 />
-                <FieldError error={!!formik.errors.name}>
-                  {formik.errors.name}
+                <FieldError error={!!formik.errors.email}>
+                  {formik.errors.email}
                 </FieldError>
               </>
             </Form.Item>
 
-            <Form.Item label="Mô tả">
+            <Form.Item label="Số điện thoại">
               <Input.TextArea
-                title={formik.values.description}
-                name="description"
+                title="phone"
+                name="phone"
                 onChange={formik.handleChange}
-                value={formik.values.description}
+                value={formik.values.phone}
               />
+              <FieldError error={!!formik.errors.phone}>
+                {formik.errors.phone}
+              </FieldError>
             </Form.Item>
             <Form.Item label="Trạng thái">
               <Space>

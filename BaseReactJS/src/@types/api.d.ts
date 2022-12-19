@@ -11,6 +11,9 @@ interface IResponse<T = any> {
   page?: number
   pages?: number
   records?: number
+
+  email?: string
+  phone?: string
 }
 
 // interface IUploadResponse {
@@ -675,6 +678,10 @@ interface ICategory {
   updateUser?: string
   createUserId?: string
   updateUserId?: string
+
+  // id?: number
+  email?: string
+  phone?: string
 }
 
 interface IBanner {
@@ -741,7 +748,8 @@ interface ICategory {
   updateUser: string
   createUserId: ID
   updateUserId: ID
-  id: ID
+  // id: ID
+  id?: string
   parent?: IArticleCategory
   children?: IArticleCategory[]
 }

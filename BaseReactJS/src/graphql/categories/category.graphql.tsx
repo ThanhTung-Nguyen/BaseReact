@@ -28,6 +28,9 @@ export const GET_ALL_NEWS_CATEGORY_PAGING = gql`
         parentId
         projectCode
         createDate
+
+        email
+        phone
       }
       page
       pages
@@ -53,6 +56,9 @@ export const GET_DETAIL_NEWS_CATEGORY = `query getCategory($id: String!)@api(nam
       projectCode
      	createDate
       
+
+      email
+      phone
     }
   }
 }`
@@ -68,6 +74,9 @@ export const SAVE_NEWS_CATEGORY = gql`
         description
         status
         id
+
+        email
+        phone
       }
     }
   }
