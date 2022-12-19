@@ -17,6 +17,8 @@ export interface ITableArticleCategoryProps {
   handleChangeStatus: (selectedRow: ICategory) => void
   handleSubmit: (value: ICategory) => void
   handleShowCreateModal: () => void
+
+  handleShowEditModal: (selectedRow: ICategory) => void
 }
 
 export interface IFilterArticleCategoryProps {

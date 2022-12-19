@@ -37,9 +37,9 @@ const FormArticleCategory = ({
   handleCloseModal,
   handleCreate,
   handleEdit
-// handleSubmit
-  
-}:IFormArticleCategoryProps) => {
+}: // handleSubmit
+
+IFormArticleCategoryProps) => {
   const formik = useFormik<ICategory>({
     validateOnMount: false,
     validateOnChange: true,
@@ -67,20 +67,21 @@ const FormArticleCategory = ({
       //   phone: value.phone,
       //   status: value.status
       // })
-      if (value.id) {
+      else if (value.id) {
+        handleEdit({
+          name: value.name,
+          email: value.email,
+          phone: value.phone,
+          status: value.status,
+          id: value.id
+        })
+      } else
         handleCreate({
           name: value.name,
           email: value.email,
           phone: value.phone,
           status: value.status
         })
-      }
-      handleEdit({
-        name: value.name,
-        email: value.email,
-        phone: value.phone,
-        status: value.status
-      })
     }
   })
 

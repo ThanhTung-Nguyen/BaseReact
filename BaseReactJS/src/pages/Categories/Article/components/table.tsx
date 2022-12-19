@@ -28,6 +28,7 @@ const TableArticleCategory = memo(
     handleChangePage,
     handleShowCreateModal,
     handleCreate,
+    handleShowEditModal,
     handleEdit,
     handleDelete,
     handleChangeStatus,
@@ -141,7 +142,7 @@ const TableArticleCategory = memo(
         dataIndex: "",
         width: 150,
         render: (value, record) => {
-          const onEdit = () => handleEdit(record)
+          const onEdit = () => handleShowEditModal(record)
           const onDelete = () => handleDelete(record)
           const onCreate = () => handleCreate(record)
 
@@ -243,7 +244,7 @@ const TableArticleCategory = memo(
                 }
                 if (selected) {
                   setSelectedRows([record?.id])
-                  handleEdit(record)
+                  handleShowEditModal(record)
                 }
               }
             }}
@@ -252,7 +253,7 @@ const TableArticleCategory = memo(
                 setSelectedRows([record?.id])
               },
               onDoubleClick: (event: any) => {
-                handleEdit(record)
+                handleShowEditModal(record)
               }
             })}
             loading={loading}

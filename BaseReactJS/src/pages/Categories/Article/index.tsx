@@ -107,6 +107,11 @@ const ArticleCategoryPage = () => {
     setSelectedRow(selectedRow)
     setFormAction(FormAction.EDIT)
     setShowModal(true)
+  }
+  const onEdit = (selectedRow: ICategory) => {
+    setSelectedRow(selectedRow)
+    setFormAction(FormAction.EDIT)
+    setShowModal(true)
     axios
       .put(`${url}/${selectedRow.id}`, {
         name: selectedRow.name,
@@ -120,12 +125,12 @@ const ArticleCategoryPage = () => {
           console.log(res.data)
         })
         console.log(res)
+        onCloseModal()
       })
       .catch(err => {
         console.log(err)
       })
   }
-
   const onShowCreateModal = () => {
     //Không post ở đây
     setSelectedRow(null)
@@ -141,9 +146,9 @@ const ArticleCategoryPage = () => {
 
   const onCreate = (value: ICategory) => {
     console.log(value)
-    setSelectedRow(null)
-    setFormAction(FormAction.CREATE)
-    setShowModal(true)
+    // setSelectedRow(null)
+    // setFormAction(FormAction.CREATE)
+    // setShowModal(true)
     axios
       .post(url, {
         name: value.name,
@@ -226,7 +231,8 @@ const ArticleCategoryPage = () => {
           records={10}
           handleShowCreateModal={onShowCreateModal}
           handleCreate={onCreate}
-          handleEdit={onShowEditModal}
+          handleShowEditModal={onShowEditModal}
+          handleEdit={onEdit}
           handleDelete={onDelete}
           handleShowDetailModal={onShowDetailModal}
           handleSubmit={onSubmit}
@@ -245,7 +251,7 @@ const ArticleCategoryPage = () => {
           showModal={showModal}
           handleCloseModal={onCloseModal}
           handleCreate={onCreate}
-          handleEdit={onShowEditModal}
+          handleEdit={onEdit}
           handleSubmit={onSubmit}
         />
       </WrapperArticleCategory>
