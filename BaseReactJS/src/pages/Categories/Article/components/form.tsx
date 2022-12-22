@@ -55,7 +55,7 @@ IFormArticleCategoryProps) => {
       name: yup.string().required("Chọn dự án")
     }),
     onSubmit: value => {
-      console.log(value)
+      // console.log(value)
       if (isFormDetail) {
         return
       }

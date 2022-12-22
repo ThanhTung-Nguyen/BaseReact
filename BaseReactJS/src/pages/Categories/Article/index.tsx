@@ -157,7 +157,6 @@ const ArticleCategoryPage = () => {
         status: value.status
       })
       .then(res => {
-        console.log(value)
         axios.get(url).then(res => {
           setPeople(res.data)
         })
